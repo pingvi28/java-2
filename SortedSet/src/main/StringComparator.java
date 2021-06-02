@@ -1,4 +1,7 @@
+package main;
+
 import java.util.Comparator;
+import java.util.Locale;
 
 public class StringComparator implements Comparator<String>{
 

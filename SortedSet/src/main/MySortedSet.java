@@ -1,6 +1,8 @@
+package main;
+
 import java.util.*;
 
-class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
+public class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
     private List<T> data;
     protected Comparator<? super T> comparator;
 
@@ -90,6 +92,14 @@ class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
         }
     }
 
+    /**
+     * this method must return [fromElement ... toElement]
+     * @param fromElement
+     * @param toElement
+     * @return SortedSet<T>
+     * @throws ClassCastException
+     * @throws NoSuchElementException
+     */
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) throws ClassCastException,NoSuchElementException {
         boolean flagFrom = chekFlagToConsist(fromElement);
@@ -106,23 +116,36 @@ class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
             catch (IndexOutOfBoundsException ex){ throw new IndexOutOfBoundsException("aaaaaa");}
             return arr;
         }
-        else throw new NoSuchElementException();
+        else throw new NoSuchElementException("I can't find");
     }
 
+    /**
+     * this method must return [ data(0) ... toElement)
+     * @param toElement
+     * @return SortedSet<T>
+     * @throws ClassCastException
+     */
     @Override
-    public SortedSet<T> headSet(T toElement) throws ClassCastException{ // <
+    public SortedSet<T> headSet(T toElement) throws ClassCastException{
         boolean flag = chekFlagToConsist(toElement);
 
         if(flag){
             MySortedSet<T> arr = new MySortedSet<>(this.subSet(data.get(0), toElement));
-            arr.add(this.last());
+            arr.remove(toElement);
             return arr;
         }
-        else throw new NoSuchElementException();
+        else throw new NoSuchElementException("I didn't find this element");
     }
 
+    /**
+     * this method must return [fromElement ... lastElement]
+     * @param fromElement
+     * @return SortedSet<T>
+     * @throws ClassCastException
+     * @throws NoSuchElementException
+     */
     @Override
-    public SortedSet<T> tailSet(T fromElement) throws ClassCastException,NoSuchElementException{ //>=
+    public SortedSet<T> tailSet(T fromElement) throws ClassCastException,NoSuchElementException{
         boolean flag = chekFlagToConsist(fromElement);
 
         if(flag){
@@ -132,10 +155,10 @@ class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
                 return arr;
             }
             catch (NoSuchElementException ex){
-                throw new NoSuchElementException("");
+                throw new NoSuchElementException("I didn't find this element");
             }
         }
-        else throw new NoSuchElementException();
+        else throw new NoSuchElementException("I didn't find this element");
     }
 
     private boolean chekFlagToConsist(T element){
@@ -174,7 +197,7 @@ class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
         if(data.size() > 1){
             return data.get(data.size() - 1);
         }
-        else throw new NoSuchElementException();
+        else throw new NoSuchElementException("I didn't find this element");
     }
 
      /**
@@ -217,14 +240,14 @@ class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new MySortedSetItetator();
+        return new MySortedSetIterator();
     }
 
-    private class MySortedSetItetator implements Iterator<T>{
+    private class MySortedSetIterator implements Iterator<T>{
         private int cursor;
         private boolean flag;
 
-        public MySortedSetItetator() {
+        public MySortedSetIterator() {
             cursor = data.size() - 1;
         }
         @Override
@@ -437,7 +460,7 @@ class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        //if (!super.equals(o)) return false;
         MySortedSet<?> sortedSet = (MySortedSet<?>) o;
         if (Objects.equals(comparator, sortedSet.comparator) &&
                 data.size() == sortedSet.data.size()) {
@@ -465,8 +488,24 @@ class MySortedSet<T> extends AbstractSet<T> implements SortedSet<T> {
      */
     public void display() {
         for (T elem: data){
-            System.out.print(elem + ", ");
+            System.out.print(elem + " ");
         }
+    }
+
+    public List<T> getData() {
+        return data;
+    }
+
+    public Comparator<? super T> getComparator() {
+        return comparator;
+    }
+
+    public void setData(List<T> data) {
+        this.data = data;
+    }
+
+    public void setComparator(Comparator<? super T> comparator) {
+        this.comparator = comparator;
     }
 }
 
